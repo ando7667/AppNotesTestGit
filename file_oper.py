@@ -50,10 +50,12 @@ def check_file(f1: str):
         return False
 
 
-def writing_scv(rec: list, fl: str):
+def writing_scv(rec: list, fl: str, idr=0):
     if check_file(fl):
         with open(fl, 'a', encoding='utf-8') as f1:
-            rec.insert(0, search_max_id()[0] + 1)
+            if idr == 0:
+                idr = search_max_id()[0] + 1
+            rec.insert(0, idr)
             f1.write(f'{rec[0]};{rec[1]};{rec[2]};{rec[3]};{rec[4]}\n')
             lg.logger_history("Запись новой заметки", f"{rec[0]} {rec[1]} {rec[3]}", "удачно")
     else:
@@ -105,6 +107,7 @@ def delete_rec_in_file(ids):
                         fw.write(line)
                     else:
                         lg.logger_history("Удаление записи", f"id={st}", "Успешно!")
-                        return st
+                        delrec = st
+                return delrec
     except:
         print("Ошибочка!")

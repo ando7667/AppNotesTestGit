@@ -1,12 +1,11 @@
 import file_oper as fo
 from datetime import datetime as dtime
-import menu as m
 import logger as lg
 
 file = fo.file[0]
 
 
-def input_data():
+def input_data(mode=0):
     data_rec = []
     title = input('Введите Заголовок: ')
     data_rec.append(title)
@@ -27,10 +26,16 @@ def add_note():
 
 
 def edit_note():
-    idd = input('Введите id заметки для Редактирования: ')
+    ide = input('Введите id заметки для Редактирования: ')
+    # читаем старую запись, удаляя из нее ид
+    reco = fo.read_rec_csv(file, ide)
+    print(reco)
+    # удаляем старую запись
+    fo.delete_rec_in_file(ide)
+    rec = input_data()
+    recn = [rec[0], rec[1], reco[3], rec[3]]
 
-    fo.delete_rec_in_file(idd)
-
+    fo.writing_scv(recn, file, ide)
     print("Запись сохранена!")
     return 1
 
@@ -85,6 +90,7 @@ def view_all_notes():
     print(f"{'-' * 30}")
     lg.logger_history("Вывод всех заметок", "", "")
     return 1
+
 
 def view_max_id():
     print(f"max_id={fo.search_max_id()}")
